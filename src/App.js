@@ -9,6 +9,7 @@ import LekDescription from "./components/LekDescription";
 import RegisterForm from "./components/RegisterForm";
 import AddLekForm from "./components/AddLekForm";
 import ListaLekLekarz from "./components/ListaLekLekarz";
+import ModifyLek from "./components/ModifyLek";
 function App() {
   return (
     <Router>
@@ -24,6 +25,7 @@ function App() {
           <Route path="/add" element={<OrderForm />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/lek/:id" element={<LekDescription />} />
+          <Route path="/modify-lek/:id" element={<ModifyLek />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

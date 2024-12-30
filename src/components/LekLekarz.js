@@ -1,12 +1,14 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link,useNavigate} from "react-router-dom";
 
 const Lek = ({lek}) => {
+    const navigate = useNavigate();
   return(
       <div>
           <h1>{lek.nazwa}</h1>
           <div className='lek-details'>
           <p>Cena: {lek.cena}</p>
+          <Link to={`/lek/${lek.id}`}>Więcej informacji</Link>
               <button onClick={
                   () => {
                     fetch(`http://localhost:3001/lek/${lek.id}`, {
@@ -21,7 +23,7 @@ const Lek = ({lek}) => {
                         });
               }
               }>Usuń</button>
-          <Link to={`/lek/${lek.id}`}>Więcej informacji</Link>
+              <button onClick={() => navigate(`/modify-lek/${lek.id}`)}>Modify</button>
           </div>
       </div>
   )
