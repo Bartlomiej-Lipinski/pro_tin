@@ -9,12 +9,18 @@ import LekDescription from "./components/LekDescription";
 import RegisterForm from "./components/RegisterForm";
 import AddLekForm from "./components/AddLekForm";
 import ListaLekLekarz from "./components/ListaLekLekarz";
+import ListaOrder from "./components/ListaOrder";
+import OrderDrescription from "./components/OrderDescription";
+import ListaUser from "./components/ListaUser";
+import UserDescription from "./components/UserDescription";
+
 function App() {
   return (
     <Router>
       <div>
         <nav>
           <a href="/">Home</a> | <a href="/add">Order </a> | <a href="/login">Login</a> | <a href="/register">Register</a> | <a href="/addMedicine">Add Medicine</a> | <a href="/listaLekowLekarz">Lista Lekow Lekarz</a>
+          <a href="/user">Lista User</a> | <a href="/order">Lista Order</a>
         </nav>
         <Routes>
           <Route path="/" element={<MainP/>} />
@@ -24,6 +30,10 @@ function App() {
           <Route path="/add" element={<OrderForm />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/lek/:id" element={<LekDescription />} />
+          <Route path="/user" element={<ListaUser/>} />
+          <Route path="user/:id" element={<UserDescription/>} />
+          <Route path="order" element={<ListaOrder/>} />
+          <Route path="order/:id" element={<OrderDrescription/>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
