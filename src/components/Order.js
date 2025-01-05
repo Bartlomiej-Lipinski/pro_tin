@@ -8,7 +8,7 @@ const Order = ({order}) => {
             <div className='lek-details'>
                 <p>Miasto: {order.Miasto}</p>
                 <p>Kod Pocztowy: {order.KodPocztowy}</p>
-                <Link to={`/order/${order.id}`}>Więcej informacji</Link>
+                <Link to={`/zamowienia/${order.NumerZamowienia}`}>Więcej informacji</Link>
             </div>
         </div>
     )

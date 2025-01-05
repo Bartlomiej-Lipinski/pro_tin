@@ -11,6 +11,7 @@ import AddLekForm from "./components/AddLekForm";
 import ListaLekLekarz from "./components/ListaLekLekarz";
 import ModifyLek from "./components/ModifyLek";
 import ListOrder from "./components/ListaOrder";
+import OrderDetails from "./components/OrderDetails";
 function App() {
   return (
     <Router>
@@ -28,6 +29,7 @@ function App() {
           <Route path="/lek/:id" element={<LekDescription />} />
           <Route path="/modify-lek/:id" element={<ModifyLek />} />
           <Route path='/zamowienia' element={<ListOrder/>} />
+            <Route path="/zamowienia/:id" element={<OrderDetails />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
