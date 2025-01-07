@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import User from "./User";
 
 function ListaUser() {
     const [data, setData] = useState([]);
@@ -22,7 +23,7 @@ function ListaUser() {
             <ul>
                 {data.map((user) => (
                     <li key={user.id}>
-                        <Link to={`/user/${user.id}`}>{user.username}</Link>
+                        <User user={user} />
                     </li>
                 ))}
             </ul>

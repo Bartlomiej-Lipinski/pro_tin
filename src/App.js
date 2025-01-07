@@ -12,12 +12,15 @@ import ListaLekLekarz from "./components/ListaLekLekarz";
 import ModifyLek from "./components/ModifyLek";
 import ListOrder from "./components/ListaOrder";
 import OrderDetails from "./components/OrderDetails";
+import ListaUser from "./components/ListaUser";
+import UserDetails from "./components/UserDetails";
 function App() {
   return (
     <Router>
       <div>
         <nav>
-          <a href="/">Home</a> | <a href="/add">Order </a> | <a href="/login">Login</a> | <a href="/register">Register</a> | <a href="/addMedicine">Add Medicine</a> | <a href="/listaLekowLekarz">Lista Lekow Lekarz</a> | <a href="/zamowienia">Lista Zamowien</a>
+          <a href="/">Home</a> | <a href="/add">Order </a> | <a href="/login">Login</a> | <a href="/register">Register</a> | <a href="/addMedicine">Add Medicine</a> |
+          <a href="/listaLekowLekarz">Lista Lekow Lekarz</a> | <a href="/zamowienia">Lista Zamowien</a> | <a href="/user">Lista Uzytkownikow</a>
         </nav>
         <Routes>
           <Route path="/" element={<MainP/>} />
@@ -29,7 +32,9 @@ function App() {
           <Route path="/lek/:id" element={<LekDescription />} />
           <Route path="/modify-lek/:id" element={<ModifyLek />} />
           <Route path='/zamowienia' element={<ListOrder/>} />
-            <Route path="/zamowienia/:id" element={<OrderDetails />} />
+          <Route path="/zamowienia/:id" element={<OrderDetails />} />
+          <Route path='/user' element={<ListaUser/>} />
+          <Route path="/user/:id" element={<UserDetails/>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

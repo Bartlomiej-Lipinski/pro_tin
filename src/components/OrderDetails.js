@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
+import {useParams} from "react-router-dom";
 
-function OrderDetails({ order }) {
+function OrderDetails() {
+    const { id } = useParams();
     const [orderDetails, setOrderDetails] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (order && order.NumerZamowienia) {
-            fetch(`http://localhost:3001/order/${order.NumerZamowienia}`)
+        if (loading) {
+            fetch(`http://localhost:3001/order/${id}`)
                 .then(response => response.json())
                 .then(data => {
                     setOrderDetails(data);
@@ -19,14 +21,10 @@ function OrderDetails({ order }) {
         } else {
             setLoading(false);
         }
-    }, [order]);
+    }, [id]);
 
     if (loading) {
         return <div>Loading...</div>;
-    }
-
-    if (!orderDetails) {
-        return <div>bagno</div>;
     }
 
     return (
@@ -38,7 +36,6 @@ function OrderDetails({ order }) {
                 <p>Ulica: {orderDetails.Ulica}</p>
                 <p>Numer domu: {orderDetails.NumerDomu}</p>
                 <p>Numer mieszkania: {orderDetails.NumerMieszkania}</p>
-                <p>Numer telefonu: {orderDetails.NumerTelefonu}</p>
             </div>
         </div>
     );

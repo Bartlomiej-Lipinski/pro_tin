@@ -1,9 +1,7 @@
 import React,{useState} from "react";
 
 const Form = () => {
-    const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [City, setCity] = useState("");
     const [street, setStreet] = useState("");
     const [houseNumber, setHouseNumber] = useState("");
     const [flatNumber, setFlatNumber] = useState("");
@@ -14,9 +12,7 @@ const Form = () => {
 
     const validate = () => {
         const newErrors = {};
-        if (!email) newErrors.email = "E-Mail is required";
-        if (!firstName) newErrors.firstName = "First name is required";
-        if (!lastName) newErrors.lastName = "Last name is required";
+        if (!City) newErrors.lastName = "Last name is required";
         if (!street) newErrors.street = "Street is required";
         if (!houseNumber) newErrors.houseNumber = "House number is required";
         if (!postalCode) newErrors.postalCode = "Postal code is required";
@@ -32,9 +28,7 @@ const Form = () => {
             return;
         }
         const newOrder={
-            email,
-            firstName,
-            lastName,
+            City,
             street,
             houseNumber,
             flatNumber,
@@ -58,18 +52,8 @@ const Form = () => {
             <h1>Formularz zamówienia</h1>
             <form id="orderForm" onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label htmlFor="eMail">E-Mail:</label>
-                    <input type="text" id="eMail" name="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                    {errors.email && <p className="error">{errors.email}</p>}
-                </div>
-                <div className="form-group">
-                    <label htmlFor="firstName">Imię:</label>
-                    <input type="text" id="firstName" name="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
-                    {errors.firstName && <p className="error">{errors.firstName}</p>}
-                </div>
-                <div className="form-group">
-                    <label htmlFor="lastName">Nazwisko:</label>
-                    <input type="text" id="lastName" name="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+                    <label htmlFor="City">Miasto:</label>
+                    <input type="text" id="City" name="lastName" value={City} onChange={(e) => setCity(e.target.value)} required />
                     {errors.lastName && <p className="error">{errors.lastName}</p>}
                 </div>
                 <div className="form-group">
