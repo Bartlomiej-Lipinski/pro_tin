@@ -9,6 +9,7 @@ const Form = () => {
     const [postalCode, setPostalCode] = useState("");
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState([]);
+    const userId = user ? user.Id : null;
 
     const [errors, setErrors] = useState({});
 
@@ -26,7 +27,9 @@ const Form = () => {
         if (loggedInUser) {
             setUser(JSON.parse(loggedInUser));
         }
+
     }, []);
+
     useEffect(() => {
         const loggedInUser = Cookies.get('cart');
         if (loggedInUser) {
@@ -54,7 +57,7 @@ const Form = () => {
             houseNumber,
             flatNumber,
             postalCode,
-
+            userId
         }
         fetch("http://localhost:3001/order", {
             method: "POST",
@@ -65,6 +68,17 @@ const Form = () => {
         }).then((res)=>{
             res.status === 200 ? console.log("Utworzono zamówienie") : console.log("Błąd tworzenia zamówienia");
         }).catch(error => console.log(error));
+
+        fetch("http://localhost:3001/cart", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({countCartItems})
+        }).then((res)=>{
+            res.status === 200 ? console.log("Utworzono zamówienie") : console.log("Błąd tworzenia zamówienia");
+        })
+        Cookies.remove('cart');
     }
     return (
         <div className="form-container">
