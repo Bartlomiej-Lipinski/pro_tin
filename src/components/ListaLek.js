@@ -47,7 +47,7 @@ const List = () => {
             <ul>
                 {currentLeki.map(lek => (
                     <li>
-                        <Lek key={lek.id} lek={lek} user={user}/>
+                        <Lek key={lek.id} lek={lek} user={user} addToCart={()=>addToCart(lek)}/>
                     </li>
                 ))}
             </ul>

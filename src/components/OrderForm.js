@@ -1,4 +1,5 @@
-import React,{useState} from "react";
+import React, {useEffect, useState} from "react";
+import Cookies from "js-cookie";
 
 const Form = () => {
     const [City, setCity] = useState("");
@@ -6,7 +7,8 @@ const Form = () => {
     const [houseNumber, setHouseNumber] = useState("");
     const [flatNumber, setFlatNumber] = useState("");
     const [postalCode, setPostalCode] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState(null);
+    const [cart, setCart] = useState([]);
 
     const [errors, setErrors] = useState({});
 
@@ -19,6 +21,25 @@ const Form = () => {
         return newErrors;
     };
 
+    useEffect(() => {
+        const loggedInUser = Cookies.get('user');
+        if (loggedInUser) {
+            setUser(JSON.parse(loggedInUser));
+        }
+    }, []);
+    useEffect(() => {
+        const loggedInUser = Cookies.get('cart');
+        if (loggedInUser) {
+            setCart(JSON.parse(loggedInUser));
+        }
+    }, []);
+
+    const countCartItems = (cart) => {
+        return cart.reduce((acc, itemId) => {
+            acc[itemId] = (acc[itemId] || 0) + 1;
+            return acc;
+        }, {});
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -32,10 +53,10 @@ const Form = () => {
             street,
             houseNumber,
             flatNumber,
-            postalCode
+            postalCode,
+
         }
-        setLoading(true);
-        fetch("http://localhost:3001/add", {
+        fetch("http://localhost:3001/order", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -43,8 +64,6 @@ const Form = () => {
             body: JSON.stringify({newOrder})
         }).then((res)=>{
             res.status === 200 ? console.log("Utworzono zamówienie") : console.log("Błąd tworzenia zamówienia");
-        }).then(() => {
-            setLoading(false);
         }).catch(error => console.log(error));
     }
     return (
@@ -75,7 +94,7 @@ const Form = () => {
                     <input type="text" id="postalCode" name="postalCode" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} required />
                     {errors.postalCode && <p className="error">{errors.postalCode}</p>}
                 </div>
-                <button type="submit" className="submit-button" disabled={loading}>Zamów</button>
+                <button type="submit" className="submit-button">Zamów</button>
             </form>
         </div>
     );
