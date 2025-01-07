@@ -1,19 +1,18 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import {useState,} from "react";
 
 function RegisterForm() {
+    const navigate = useNavigate();
     const [imie, setImie] = useState("");
     const [nazwisko,setNazwisko] = useState("");
     const [password,setPassword] = useState("");
     const [email, setEmail] = useState("");
     const [errors, setErrors] = useState({});
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = {};
-
-
         if (!imie) newErrors.imie = "Imię jest wymagane";
         if (!nazwisko) newErrors.nazwisko = "Nazwisko jest wymagane";
         if (!password) newErrors.password = "Hasło jest wymagane";
@@ -29,8 +28,31 @@ function RegisterForm() {
             console.log(imie, nazwisko, password, email);
             setErrors({});
         }
+        let newUser = {imie, nazwisko, password, email};
+        try {
+            const response = await fetch("http://localhost:3001/user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newUser),
+            });
+            if (response.status === 201) {
+                console.log("User created successfully");
+                navigate("/login");
+            } else {
+                console.error("Error:", response.status);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+
         console.log(imie, password, email);
     }
+    React.useEffect(() => {
+
+
+    },[]);
 
     return (
         <div>

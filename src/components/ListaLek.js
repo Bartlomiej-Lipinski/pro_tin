@@ -51,6 +51,11 @@ const List = () => {
                     </li>
                 ))}
             </ul>
+            <button onClick={()=>{
+                Cookies.set('cart', JSON.stringify(cart));
+                window.location.href = "/add";
+            }
+            }>Proced to Order</button>
             <div className="pagination">
                 {pageNumbers.map(number => (
                     <button key={number} onClick={() => handlePageChange(number)}>
