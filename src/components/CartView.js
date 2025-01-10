@@ -1,18 +1,21 @@
-import React,{useState, useEffect} from "react";
-import LekLekarz from "./LekLekarz";
-
-const ListaLekLekarz = () => {
+import React from "react";
+import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {useState,useEffect} from "react";
+import Cart from "./Cart";
+function CartView(){
     const [leki, setLeki] = useState([]);
+    const navigate = useNavigate();
+    const [cart, setCart] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        fetch("http://localhost:3001/lek?page=${currentPage}&limit=7")
+        fetch(`http://localhost:3001/cart?page=${currentPage}&limit=7`)
         .then(response => response.json())
         .then(data => {
-            setLeki(data)
+            setCart(data)
         }).catch(error=> console.log(error));
     }, []);
-
     const handleNextPage = () => {
         setCurrentPage((prevPage) => prevPage + 1);
     };
@@ -21,13 +24,13 @@ const ListaLekLekarz = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
-    return (
+    return(
         <div>
-            <h1>Lista leków</h1>
+            <h1>Cart</h1>
             <ul>
-                {leki.map(lek => (
+                {cart.map(cart => (
                     <li>
-                        <LekLekarz key={lek.id} lek={lek}/>
+                        <Cart key={cart.Order_NumerZamowienia} cart={cart}/>
                     </li>
                 ))}
             </ul>
@@ -40,6 +43,7 @@ const ListaLekLekarz = () => {
                 </button>
             </div>
         </div>
-    );
+    )
 }
-export default ListaLekLekarz;
+
+export default CartView;

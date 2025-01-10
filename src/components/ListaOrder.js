@@ -4,10 +4,9 @@ import Order from "./Order";
 const ListOrder = () => {
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const ordersPerPage = 3;
 
     useEffect(() => {
-        fetch("http://localhost:3001/order")
+        fetch("http://localhost:3001/order?page=${currentPage}&limit=7")
             .then(response => response.json())
             .then(data => {
                 setOrders(data);
@@ -15,34 +14,32 @@ const ListOrder = () => {
             .catch(error => {
                 console.log(error);
             });
-    }, []);
+    }, [currentPage]);
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+    const handleNextPage = () => {
+        setCurrentPage((prevPage) => prevPage + 1);
     };
-    const indexOfLastOrder = currentPage * ordersPerPage;
-    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-    const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(orders.length / ordersPerPage); i++) {
-        pageNumbers.push(i);
-    }
+
+    const handlePreviousPage = () => {
+        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    };
     return (
         <div>
             <h1>Lista zamówień</h1>
             <ul>
-                {currentOrders.map(order => (
+                {orders.map(order => (
                     <li key={order.id}>
                         <Order order={order}/>
                     </li>
                 ))}
             </ul>
             <div className="pagination">
-                {pageNumbers.map(number => (
-                    <button key={number} onClick={() => handlePageChange(number)}>
-                        {number}
-                    </button>
-                ))}
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <button onClick={handleNextPage}>
+                    Next
+                </button>
             </div>
         </div>
     );

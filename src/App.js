@@ -15,6 +15,7 @@ import OrderDetails from "./components/OrderDetails";
 import ListaUser from "./components/ListaUser";
 import UserDetails from "./components/UserDetails";
 import Cookies from "js-cookie";
+import CartView from "./components/CartView";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -54,6 +55,7 @@ function App() {
                   <a href="/listaLekowLekarz">Lista Lekow Lekarz</a>
                   <a href="/zamowienia">Lista Zamowien</a>
                   <a href="/user">Lista Uzytkownikow</a>
+                  <a href="/carts">Lista koszyków</a>
                   <a onClick={handleLogout}>Logout</a>
                 </>
             )}
@@ -73,6 +75,7 @@ function App() {
                   <Route path="/zamowienia/:id" element={<OrderDetails />} />
                   <Route path='/user' element={<ListaUser />} />
                   <Route path="/user/:id" element={<UserDetails />} />
+                  <Route path={'/carts'} element={<CartView />} />
                 </>
             )}
             <Route path="*" element={<NotFound />} />

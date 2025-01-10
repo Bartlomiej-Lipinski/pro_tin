@@ -7,7 +7,6 @@ const List = () => {
     const [cart, setCart] = useState([]);
     const [user, setUser] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const ordersPerPage = 3;
 
     const addToCart = (lek) => {
         setCart([...cart, lek.id]);
@@ -20,22 +19,19 @@ const List = () => {
     }, []);
 
     useEffect(() => {
-        fetch("http://localhost:3001/lek")
+        fetch(`http://localhost:3001/lek?page=${currentPage}&limit=7`)
         .then(response => response.json())
         .then(data => {
             setLeki(data)
         }).catch(error=> console.log(error));
     }, []);
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+    const handleNextPage = () => {
+        setCurrentPage((prevPage) => prevPage + 1);
     };
-    const indexOfLastLek = currentPage * ordersPerPage;
-    const indexOfFirstLek = indexOfLastLek - ordersPerPage;
-    const currentLeki = leki.slice(indexOfFirstLek, indexOfLastLek);
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(leki.length / ordersPerPage); i++) {
-        pageNumbers.push(i);
-    }
+
+    const handlePreviousPage = () => {
+        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    };
 
     return (
         <div>
@@ -45,23 +41,25 @@ const List = () => {
                 <span>{cart.length}</span>
             </div>
             <ul>
-                {currentLeki.map(lek => (
+                {leki.map(lek => (
                     <li>
-                        <Lek key={lek.id} lek={lek} user={user} addToCart={()=>addToCart(lek)}/>
+                        <Lek key={lek.id} lek={lek} user={user} addToCart={() => addToCart(lek)}/>
                     </li>
                 ))}
             </ul>
-            <button onClick={()=>{
+            <button onClick={() => {
                 Cookies.set('cart', JSON.stringify(cart));
                 window.location.href = "/add";
             }
-            }>Proced to Order</button>
+            }>Proced to Order
+            </button>
             <div className="pagination">
-                {pageNumbers.map(number => (
-                    <button key={number} onClick={() => handlePageChange(number)}>
-                        {number}
-                    </button>
-                ))}
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <button onClick={handleNextPage}>
+                    Next
+                </button>
             </div>
         </div>
     );

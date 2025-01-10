@@ -5,42 +5,39 @@ import User from "./User";
 function ListaUser() {
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const ordersPerPage = 7;
-
     React.useEffect(() => {
-        fetch("http://localhost:3001/user")
+        fetch(`http://localhost:3001/user?page=${currentPage}&limit=7`)
             .then((res) => res.json())
             .then((data) => {
                 setUsers(data);
             });
-    }, []);
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+    }, [currentPage]);
+
+    const handleNextPage = () => {
+        setCurrentPage((prevPage) => prevPage + 1);
     };
-    const indexOfLastUser = currentPage * ordersPerPage;
-    const indexOfFirstUser = indexOfLastUser - ordersPerPage;
-    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(users.length / ordersPerPage); i++) {
-        pageNumbers.push(i);
-    }
+
+    const handlePreviousPage = () => {
+        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    };
 
     return (
         <div>
             <h1>User List</h1>
             <ul>
-                {currentUsers.map(user => (
+                {users.map(user => (
                     <li key={user.id}>
                         <User user={user}/>
                     </li>
                 ))}
             </ul>
             <div className="pagination">
-                {pageNumbers.map(number => (
-                    <button key={number} onClick={() => handlePageChange(number)}>
-                        {number}
-                    </button>
-                ))}
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <button onClick={handleNextPage}>
+                    Next
+                </button>
             </div>
         </div>
     );
