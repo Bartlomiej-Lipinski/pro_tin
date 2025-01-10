@@ -1,9 +1,9 @@
 import React from "react";
-import {Link} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import {useState,useEffect} from "react";
 import Cart from "./Cart";
 function CartView(){
+
     const [leki, setLeki] = useState([]);
     const navigate = useNavigate();
     const [cart, setCart] = useState([]);
@@ -16,6 +16,7 @@ function CartView(){
             setCart(data)
         }).catch(error=> console.log(error));
     }, []);
+
     const handleNextPage = () => {
         setCurrentPage((prevPage) => prevPage + 1);
     };

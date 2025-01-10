@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Order from "./Order";
+import Cookies from "js-cookie";
 
 const ListOrder = () => {
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [user, setUser] = useState({});
 
     useEffect(() => {
-        fetch("http://localhost:3001/order?page=${currentPage}&limit=7")
+        const loggedInUser = Cookies.get('user');
+        if (loggedInUser) {
+            setUser(JSON.parse(loggedInUser));
+        }
+    }, []);
+
+    useEffect(() => {
+        let url = `http://localhost:3001/order/user/${user.id}?page=${currentPage}&limit=3`;
+        if (user && user.Credentials === 'ADM') {
+            url=`http://localhost:3001/order?page=${currentPage}&limit=3`
+        }
+        fetch(url)
             .then(response => response.json())
             .then(data => {
                 setOrders(data);
@@ -14,7 +27,7 @@ const ListOrder = () => {
             .catch(error => {
                 console.log(error);
             });
-    }, [currentPage]);
+    }, [currentPage, user]);
 
     const handleNextPage = () => {
         setCurrentPage((prevPage) => prevPage + 1);

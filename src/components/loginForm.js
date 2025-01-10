@@ -9,7 +9,7 @@ const LoginForm = () => {
     const [users, setUsers] = useState([]);
 
     React.useEffect(() => {
-        fetch("http://localhost:3001/user")
+        fetch("http://localhost:3001/userLogin")
             .then((res) => res.json())
             .then((data) => {
                 setUsers(data);

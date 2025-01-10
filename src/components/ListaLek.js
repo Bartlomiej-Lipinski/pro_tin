@@ -47,12 +47,12 @@ const List = () => {
                     </li>
                 ))}
             </ul>
-            <button onClick={() => {
+            {user && <button onClick={() => {
                 Cookies.set('cart', JSON.stringify(cart));
                 window.location.href = "/add";
             }
             }>Proced to Order
-            </button>
+            </button>}
             <div className="pagination">
                 <button onClick={handlePreviousPage} disabled={currentPage === 1}>
                     Previous

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, useNavigate} from 'react-router-dom';
 import MainP from "./components/MainP";
 import OrderForm from "./components/OrderForm";
 import LoginForm from "./components/loginForm";
@@ -19,7 +19,6 @@ import CartView from "./components/CartView";
 
 function App() {
   const [user, setUser] = useState(null);
-
   useEffect(() => {
     const loggedInUser = Cookies.get('user');
     if (loggedInUser) {
@@ -30,6 +29,7 @@ function App() {
   const handleLogout = () => {
     Cookies.remove('user');
     setUser(null);
+    window.location.href = "/";
     window.location.reload();
   };
   return (
@@ -50,13 +50,17 @@ function App() {
             )}
             {user && (
                 <>
-                  <a href="/add">Order</a>
-                  <a href="/addMedicine">Add Medicine</a>
-                  <a href="/listaLekowLekarz">Lista Lekow Lekarz</a>
+                  <a href="/add">Zamów</a>
                   <a href="/zamowienia">Lista Zamowien</a>
-                  <a href="/user">Lista Uzytkownikow</a>
                   <a href="/carts">Lista koszyków</a>
                   <a onClick={handleLogout}>Logout</a>
+                </>
+            )}
+            {user && user.Credentials === 'ADM' && (
+                <>
+                  <a href="/addMedicine">Dodaj Lek</a>
+                  <a href="/listaLekowLekarz">Lista Lekow Lekarz</a>
+                  <a href="/user">Lista Uzytkownikow</a>
                 </>
             )}
           </nav>
@@ -80,6 +84,9 @@ function App() {
             )}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <div>
+            <a>PL</a>/<a>EN</a>
+          </div>
         </div>
       </Router>
   );
