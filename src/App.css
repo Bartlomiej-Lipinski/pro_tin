@@ -134,4 +134,9 @@ li span {
         margin-top: 10px;
         float: left;
     }
+    .lan{
+        display: flex;
+        justify-content: space-between;
+
+    }
 }

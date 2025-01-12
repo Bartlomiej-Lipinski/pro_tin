@@ -8,10 +8,10 @@ const Lek = ({lek}) => {
           <h1>{lek.Nazwa}</h1>
           <div className='lek-details'>
           <p>Cena: {lek.Cena}</p>
-          <Link to={`/lek/${lek.id}`}>Więcej informacji</Link>
+          <Link to={`/lek/${lek.Id}`}>Więcej informacji</Link>
               <button onClick={
                   () => {
-                    fetch(`http://localhost:3001/lek/${lek.id}`, {
+                    fetch(`http://localhost:3001/lek/${lek.Id}`, {
                         method: 'DELETE'
                     })
                         .then(response => response.json())
@@ -23,7 +23,7 @@ const Lek = ({lek}) => {
                         });
               }
               }>Usuń</button>
-              <button onClick={() => navigate(`/modify-lek/${lek.id}`)}>Modify</button>
+              <button onClick={() => navigate(`/modify-lek/${lek.Id}`)}>Modify</button>
           </div>
       </div>
   )

@@ -16,6 +16,7 @@ import ListaUser from "./components/ListaUser";
 import UserDetails from "./components/UserDetails";
 import Cookies from "js-cookie";
 import CartView from "./components/CartView";
+import ModifyUser from "./components/ModifyUser";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -56,7 +57,7 @@ function App() {
                   <a onClick={handleLogout}>Logout</a>
                 </>
             )}
-            {user && user.Credentials === 'ADM' && (
+            {user && user.credentials === 'ADM' && (
                 <>
                   <a href="/addMedicine">Dodaj Lek</a>
                   <a href="/listaLekowLekarz">Lista Lekow Lekarz</a>
@@ -72,9 +73,6 @@ function App() {
             {user && (
                 <>
                   <Route path="/add" element={<OrderForm />} />
-                  <Route path="/addMedicine" element={<AddLekForm />} />
-                  <Route path="/listaLekowLekarz" element={<ListaLekLekarz />} />
-                  <Route path="/modify-lek/:id" element={<ModifyLek />} />
                   <Route path='/zamowienia' element={<ListOrder />} />
                   <Route path="/zamowienia/:id" element={<OrderDetails />} />
                   <Route path='/user' element={<ListaUser />} />
@@ -82,9 +80,19 @@ function App() {
                   <Route path={'/carts'} element={<CartView />} />
                 </>
             )}
+            {user && user.credentials === 'ADM' && (
+                <>
+                  <Route path="/addMedicine" element={<AddLekForm />} />
+                  <Route path="/listaLekowLekarz" element={<ListaLekLekarz />} />
+                  <Route path="/modify-lek/:id" element={<ModifyLek />} />
+                  <Route path='/user' element={<ListaUser />} />
+                  <Route path="/user/:id" element={<UserDetails />} />
+                  <Route path={"/modify-user/:id"} element={<ModifyUser />} />
+                </>
+            )}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <div>
+          <div className='lan'>
             <a>PL</a>/<a>EN</a>
           </div>
         </div>

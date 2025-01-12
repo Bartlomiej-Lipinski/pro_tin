@@ -10,37 +10,20 @@ const Form = ({ lek }) => {
   const [kod_produktu, setKod_produktu] = useState("");
   const [dawka, setDawka] = useState("");
   const [data_waznosci, setData_waznosci] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (lek) {
-      setNazwa(lek.nazwa);
-      setCena(lek.cena);
-      setUlotka(lek.ulotka);
-      setIlosc(lek.ilosc);
-      setIlosc_tabletek(lek.ilosc_tabletek);
-      setKod_produktu(lek.kod_produktu);
-      setDawka(lek.dawka);
-      setData_waznosci(lek.data_waznosci);
-    }
-  }, [lek]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newLek = {
-      nazwa,
-      cena,
-      ulotka,
-      ilosc,
-      ilosc_tabletek,
-      kod_produktu,
-      dawka,
-      data_waznosci
-    };
-    setLoading(true);
-
-    const url = lek ? `http://localhost:3001/lek/${lek.id}` : "http://localhost:3001/lek";
+    const newLek = {};
+      newLek.nazwa = nazwa || lek.Nazwa;
+      newLek.cena = cena || lek.Cena;
+      newLek.ulotka = ulotka || lek.Ulotka;
+      newLek.ilosc = ilosc || lek.Ilosc;
+      newLek.ilosc_tabletek = ilosc_tabletek || lek.IloscTabletek;
+      newLek.kod_produktu = kod_produktu || lek.KodProduktu;
+      newLek.dawka = dawka || lek.Dawka;
+      newLek.data_waznosci = data_waznosci || lek.DataWaznosci;
+    const url = lek ? `http://localhost:3001/lek/${lek.Id}` : "http://localhost:3001/lek";
     const method = lek ? "PUT" : "POST";
 
     fetch(url, {
@@ -52,17 +35,15 @@ const Form = ({ lek }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.id) {
+        if (data.message === "Lek zaktualizowany pomyślnie") {
           console.log(`${lek ? "Updated" : "Added"} lek:`, data);
-          navigate(`/lek/${data.id}`);
+          navigate(`/lek`);
         } else {
           console.log(`Error ${lek ? "updating" : "adding"} lek`);
         }
-        setLoading(false);
       })
       .catch(error => {
         console.log(error);
-        setLoading(false);
       });
   };
 
@@ -70,15 +51,15 @@ const Form = ({ lek }) => {
     <div>
       <h1>{lek ? "Edytuj" : "Dodaj"} lek</h1>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Nazwa" value={nazwa} onChange={(e) => setNazwa(e.target.value)} />
-        <input type="text" placeholder="Cena" value={cena} onChange={(e) => setCena(e.target.value)} />
-        <input type="text" placeholder="Ulotka" value={ulotka} onChange={(e) => setUlotka(e.target.value)} />
-        <input type="text" placeholder="Ilość" value={ilosc} onChange={(e) => setIlosc(e.target.value)} />
-        <input type="text" placeholder="Ilość tabletek" value={ilosc_tabletek} onChange={(e) => setIlosc_tabletek(e.target.value)} />
-        <input type="text" placeholder="Kod produktu" value={kod_produktu} onChange={(e) => setKod_produktu(e.target.value)} />
-        <input type="text" placeholder="Dawka" value={dawka} onChange={(e) => setDawka(e.target.value)} />
-        <input type="date" placeholder="Data ważności" value={data_waznosci} onChange={(e) => setData_waznosci(e.target.value)} />
-        <button type="submit" disabled={loading}>{lek ? "Zapisz zmiany" : "Dodaj"}</button>
+        <input type="text" placeholder={lek?lek.Nazwa:'Nazwa'} value={nazwa} onChange={(e) => setNazwa(e.target.value)} />
+        <input type="text" placeholder={lek?lek.Cena:'Cena'} value={cena} onChange={(e) => setCena(e.target.value)} />
+        <input type="text" placeholder={lek?lek.Ulotka:'Ulotka'} value={ulotka} onChange={(e) => setUlotka(e.target.value)} />
+        <input type="text" placeholder={lek?lek.Ilosc:'Ilość'} value={ilosc} onChange={(e) => setIlosc(e.target.value)} />
+        <input type="text" placeholder={lek?lek.IloscTabletek:'Ilość tabletek'} value={ilosc_tabletek} onChange={(e) => setIlosc_tabletek(e.target.value)} />
+        <input type="text" placeholder={lek?lek.KodProduktu:'Kod Produktu'} value={kod_produktu} onChange={(e) => setKod_produktu(e.target.value)} />
+        <input type="text" placeholder={lek?lek.Dawka:'Dawka'} value={dawka} onChange={(e) => setDawka(e.target.value)} />
+        <input type="date" placeholder={lek?lek.DataWaznosci:'Data ważności'} value={data_waznosci} onChange={(e) => setData_waznosci(e.target.value)} />
+        <button type="submit" >{lek ? "Zapisz zmiany" : "Dodaj"}</button>
       </form>
     </div>
   );

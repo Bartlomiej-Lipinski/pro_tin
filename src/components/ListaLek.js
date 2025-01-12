@@ -7,6 +7,8 @@ const List = () => {
     const [cart, setCart] = useState([]);
     const [user, setUser] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const limit = 7;
 
     const addToCart = (lek) => {
         setCart([...cart, lek.id]);
@@ -23,8 +25,9 @@ const List = () => {
         .then(response => response.json())
         .then(data => {
             setLeki(data)
+            setHasMore(data.length === limit);
         }).catch(error=> console.log(error));
-    }, []);
+    }, [currentPage]);
     const handleNextPage = () => {
         setCurrentPage((prevPage) => prevPage + 1);
     };
@@ -57,7 +60,7 @@ const List = () => {
                 <button onClick={handlePreviousPage} disabled={currentPage === 1}>
                     Previous
                 </button>
-                <button onClick={handleNextPage}>
+                <button onClick={handleNextPage} disabled={!hasMore}>
                     Next
                 </button>
             </div>

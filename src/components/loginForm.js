@@ -21,7 +21,7 @@ const LoginForm = () => {
         let userData = {};
         users.map(user => {
             if (user.Email === email && user.Password === password) {
-                 userData = { id:user.Id, firstName: user.Imie, lastName: user.Nazwisko , email: user.Email ,Credentials: user.Credential};
+                 userData = { id:user.Id, firstName: user.Imie, lastName: user.Nazwisko , email: user.Email ,credentials: user.Credential};
                 Cookies.set('user', JSON.stringify(userData));
                 navigate("/");
                 window.location.reload();
