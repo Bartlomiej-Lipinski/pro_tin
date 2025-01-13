@@ -7,7 +7,6 @@ const List = () => {
     const [cart, setCart] = useState([]);
     const [user, setUser] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
     const limit = 7;
 
     const addToCart = (lek) => {
@@ -21,11 +20,10 @@ const List = () => {
     }, []);
 
     useEffect(() => {
-        fetch(`http://localhost:3001/lek?page=${currentPage}&limit=7`)
+        fetch(`http://localhost:3001/lek?page=${currentPage}&limit=3`)
         .then(response => response.json())
         .then(data => {
             setLeki(data)
-            setHasMore(data.length === limit);
         }).catch(error=> console.log(error));
     }, [currentPage]);
     const handleNextPage = () => {
@@ -61,7 +59,7 @@ const List = () => {
                 <button onClick={handlePreviousPage} disabled={currentPage === 1}>
                     Previous
                 </button>
-                <button onClick={handleNextPage} disabled={!hasMore}>
+                <button onClick={handleNextPage} >
                     Next
                 </button>
             </div>
