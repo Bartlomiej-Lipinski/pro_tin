@@ -24,6 +24,7 @@ const Form = ({ lek }) => {
     if (!dawka) newErrors.dawka = "Dawka is required";
     if (!data_waznosci) newErrors.data_waznosci = "Data ważności is required";
     return newErrors;
+
   };
 
   const handleSubmit = (e) => {
@@ -34,6 +35,11 @@ const Form = ({ lek }) => {
         setErrors(newErrors);
         return;
       }
+    }
+    let tempcena = parseFloat(cena).toPrecision(4);
+    if (tempcena === 'NaN') {
+        setErrors({ cena: "Cena musi być liczbą" });
+        return;
     }
     const newLek = {
       nazwa: nazwa || lek.Nazwa,
@@ -57,10 +63,12 @@ const Form = ({ lek }) => {
     })
         .then((res) => res.json())
         .then((data) => {
-          if (data.message === "Lek zaktualizowany pomyślnie"|| data.message === "Lek dodany pomyślnie") {
+          if (data.message === "Lek zaktualizowany pomyślnie") {
             console.log(`${lek ? "Updated" : "Added"} lek:`, data);
             navigate(`/lek/${lek.Id}`);
-          } else {
+          }else if(data.message === "Lek dodany pomyślnie"){
+            navigate(`/lek/${data.id}`);
+          }else {
             console.log(`Error ${lek ? "updating" : "adding"} lek`);
           }
         })
@@ -79,13 +87,13 @@ const Form = ({ lek }) => {
           {errors.cena && <p className="error">{errors.cena}</p>}
           <input type="text" placeholder={lek ? lek.Ulotka : 'Ulotka'} value={ulotka} onChange={(e) => setUlotka(e.target.value)} />
           {errors.ulotka && <p className="error">{errors.ulotka}</p>}
-          <input type="text" placeholder={lek ? lek.Ilosc : 'Ilość'} value={ilosc} onChange={(e) => setIlosc(e.target.value)} />
+          <input type="number" placeholder={lek ? lek.Ilosc : 'Ilość'} value={ilosc} onChange={(e) => setIlosc(e.target.value)} />
           {errors.ilosc && <p className="error">{errors.ilosc}</p>}
-          <input type="text" placeholder={lek ? lek.IloscTabletek : 'Ilość tabletek'} value={ilosc_tabletek} onChange={(e) => setIlosc_tabletek(e.target.value)} />
+          <input type="number" placeholder={lek ? lek.IloscTabletek : 'Ilość tabletek'} value={ilosc_tabletek} onChange={(e) => setIlosc_tabletek(e.target.value)} />
           {errors.ilosc_tabletek && <p className="error">{errors.ilosc_tabletek}</p>}
-          <input type="text" placeholder={lek ? lek.KodProduktu : 'Kod Produktu'} value={kod_produktu} onChange={(e) => setKod_produktu(e.target.value)} />
+          <input type="number" placeholder={lek ? lek.KodProduktu : 'Kod Produktu'} value={kod_produktu} onChange={(e) => setKod_produktu(e.target.value)} />
           {errors.kod_produktu && <p className="error">{errors.kod_produktu}</p>}
-          <input type="text" placeholder={lek ? lek.Dawka : 'Dawka'} value={dawka} onChange={(e) => setDawka(e.target.value)} />
+          <input type="number" placeholder={lek ? lek.Dawka : 'Dawka'} value={dawka} onChange={(e) => setDawka(e.target.value)} />
           {errors.dawka && <p className="error">{errors.dawka}</p>}
           <input type="date" placeholder={lek ? lek.DataWaznosci : 'Data ważności'} value={data_waznosci} onChange={(e) => setData_waznosci(e.target.value)} />
           {errors.data_waznosci && <p className="error">{errors.data_waznosci}</p>}

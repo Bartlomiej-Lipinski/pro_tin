@@ -42,11 +42,15 @@ const List = () => {
                 <span>{cart.length}</span>
             </div>
             <ul>
-                {leki.map(lek => (
-                    <li>
-                        <Lek key={lek.id} lek={lek} user={user} addToCart={() => addToCart(lek)}/>
-                    </li>
-                ))}
+                {Array.isArray(leki) && leki.length > 0 ? (
+                    leki.map(lek => (
+                        <li key={lek.id}>
+                            <Lek lek={lek} user={user} addToCart={() => addToCart(lek)}/>
+                        </li>
+                    ))
+                ) : (
+                    <p>Brak leków do wyświetlenia.</p>
+                )}
             </ul>
             <h2>Strona: {currentPage}</h2>
             {user && <button onClick={() => {
@@ -59,7 +63,7 @@ const List = () => {
                 <button onClick={handlePreviousPage} disabled={currentPage === 1}>
                     Previous
                 </button>
-                <button onClick={handleNextPage} >
+                <button onClick={handleNextPage}>
                     Next
                 </button>
             </div>
