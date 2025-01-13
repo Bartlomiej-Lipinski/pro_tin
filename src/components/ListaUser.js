@@ -31,6 +31,7 @@ function ListaUser() {
                     </li>
                 ))}
             </ul>
+            <h2>Strona: {currentPage}</h2>
             <div className="pagination">
                 <button onClick={handlePreviousPage} disabled={currentPage === 1}>
                     Previous

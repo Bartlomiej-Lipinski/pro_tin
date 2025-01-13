@@ -51,7 +51,6 @@ function App() {
             )}
             {user && (
                 <>
-                  <a href="/add">Zamów</a>
                   <a href="/zamowienia">Lista Zamowien</a>
                   <a href="/carts">Lista koszyków</a>
                   <a onClick={handleLogout}>Logout</a>

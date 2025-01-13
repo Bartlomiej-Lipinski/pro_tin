@@ -9,6 +9,17 @@ const Order = ({order}) => {
                 <p>Miasto: {order.Miasto}</p>
                 <p>Kod Pocztowy: {order.KodPocztowy}</p>
                 <Link to={`/zamowienia/${order.NumerZamowienia}`}>Więcej informacji</Link>
+                <button onClick={()=>{
+                    fetch(`http://localhost:3001/order/${order.NumerZamowienia}`,{
+                        method: 'DELETE'
+                    }).then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                }}>Delete</button>
             </div>
         </div>
     )

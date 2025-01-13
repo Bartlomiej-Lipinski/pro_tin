@@ -15,18 +15,20 @@ const ListOrder = () => {
     }, []);
 
     useEffect(() => {
-        let url = `http://localhost:3001/order/user/${user.id}?page=${currentPage}&limit=3`;
-        if (user && user.Credentials === 'ADM') {
-            url=`http://localhost:3001/order?page=${currentPage}&limit=3`
+        if (user && user.id) {
+            let url = `http://localhost:3001/order/user/${user.id}?page=${currentPage}&limit=3`;
+            if (user.credentials === 'ADM') {
+                url = `http://localhost:3001/order?page=${currentPage}&limit=3`;
+            }
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    setOrders(data);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                setOrders(data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
     }, [currentPage, user]);
 
     const handleNextPage = () => {
@@ -36,6 +38,7 @@ const ListOrder = () => {
     const handlePreviousPage = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
+
     return (
         <div>
             <h1>Lista zamówień</h1>
@@ -46,6 +49,7 @@ const ListOrder = () => {
                     </li>
                 ))}
             </ul>
+            <h2>Strona: {currentPage}</h2>
             <div className="pagination">
                 <button onClick={handlePreviousPage} disabled={currentPage === 1}>
                     Previous

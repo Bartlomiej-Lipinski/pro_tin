@@ -11,7 +11,7 @@ const List = () => {
     const limit = 7;
 
     const addToCart = (lek) => {
-        setCart([...cart, lek.id]);
+        setCart([...cart, lek.Id]);
     };
     useEffect(() => {
         const loggedInUser = Cookies.get('user');
@@ -50,6 +50,7 @@ const List = () => {
                     </li>
                 ))}
             </ul>
+            <h2>Strona: {currentPage}</h2>
             {user && <button onClick={() => {
                 Cookies.set('cart', JSON.stringify(cart));
                 window.location.href = "/add";

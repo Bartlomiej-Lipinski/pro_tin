@@ -2,23 +2,23 @@ import React, {useEffect, useState} from "react";
 import Cookies from "js-cookie";
 
 const Form = () => {
-    const [City, setCity] = useState("");
-    const [street, setStreet] = useState("");
-    const [houseNumber, setHouseNumber] = useState("");
-    const [flatNumber, setFlatNumber] = useState("");
-    const [postalCode, setPostalCode] = useState("");
-    const [user, setUser] = useState(null);
+    const [Miasto, setMiasto] = useState("");
+    const [Ulica, setUlica] = useState("");
+    const [NumerDomu, setNumerDomu] = useState("");
+    const [NumerMieszkania, setNumerMieszkania] = useState("");
+    const [KodPocztowy, setKodPocztowy] = useState("");
+    const [user, setUser] = useState({});
     const [cart, setCart] = useState([]);
-    const userId = user ? user.Id : null;
-
+    const [cartMap, setCartMap] = useState(new Map());
+    const userId = user.id;
     const [errors, setErrors] = useState({});
 
     const validate = () => {
         const newErrors = {};
-        if (!City) newErrors.lastName = "Last name is required";
-        if (!street) newErrors.street = "Street is required";
-        if (!houseNumber) newErrors.houseNumber = "House number is required";
-        if (!postalCode) newErrors.postalCode = "Postal code is required";
+        if (!Miasto) newErrors.lastName = "Last name is required";
+        if (!Ulica) newErrors.street = "Street is required";
+        if (!NumerDomu) newErrors.houseNumber = "House number is required";
+        if (!KodPocztowy) newErrors.postalCode = "Postal code is required";
         return newErrors;
     };
 
@@ -27,7 +27,6 @@ const Form = () => {
         if (loggedInUser) {
             setUser(JSON.parse(loggedInUser));
         }
-
     }, []);
 
     useEffect(() => {
@@ -38,74 +37,87 @@ const Form = () => {
     }, []);
 
     const countCartItems = (cart) => {
-        return cart.reduce((acc, itemId) => {
-            acc[itemId] = (acc[itemId] || 0) + 1;
-            return acc;
-        }, {});
+        const map = new Map();
+        cart.forEach((item) => {
+            map.set(item, map.get(item) + 1 || 1);
+        });
+        setCartMap(map);
     };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const newErrors = validate();
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            return;
-        }
-        const newOrder={
-            City,
-            street,
-            houseNumber,
-            flatNumber,
-            postalCode,
-            userId
-        }
-        fetch("http://localhost:3001/order", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({newOrder})
-        }).then((res)=>{
-            res.status === 200 ? console.log("Utworzono zamówienie") : console.log("Błąd tworzenia zamówienia");
-        }).catch(error => console.log(error));
-
+    function submitCart(orderid, lekId, ilosc){
+        let cartToCommit = {orderid,lekId,ilosc};
         fetch("http://localhost:3001/cart", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({countCartItems})
+            body: JSON.stringify(cartToCommit)
         }).then((res)=>{
             res.status === 200 ? console.log("Utworzono zamówienie") : console.log("Błąd tworzenia zamówienia");
         })
-        Cookies.remove('cart');
     }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        let orderid = 0;
+        const newErrors = validate();
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+        const newOrder = {
+            Miasto,
+            Ulica,
+            NumerDomu,
+            NumerMieszkania,
+            KodPocztowy,
+            userId
+        };
+        fetch("http://localhost:3001/order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newOrder)
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                orderid = data.id;
+                countCartItems(cart);
+                if (orderid !== 0 || orderid !== undefined) {
+                    cartMap.forEach((value, key) => {
+                        submitCart(orderid, key, value);
+                    });
+                    Cookies.remove('cart');
+                }
+            })
+            .catch(error => console.log(error));
+    };
     return (
         <div className="form-container">
             <h1>Formularz zamówienia</h1>
             <form id="orderForm" onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="City">Miasto:</label>
-                    <input type="text" id="City" name="lastName" value={City} onChange={(e) => setCity(e.target.value)} required />
+                    <input type="text" id="City" name="lastName" value={Miasto} onChange={(e) => setMiasto(e.target.value)} required />
                     {errors.lastName && <p className="error">{errors.lastName}</p>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="street">Ulica:</label>
-                    <input type="text" id="street" name="ulica" value={street} onChange={(e) => setStreet(e.target.value)} required />
+                    <input type="text" id="street" name="ulica" value={Ulica} onChange={(e) => setUlica(e.target.value)} required />
                     {errors.street && <p className="error">{errors.street}</p>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="houseNumber">Numer domu:</label>
-                    <input type="text" id="houseNumber" name="numerDomu" value={houseNumber} onChange={(e) => setHouseNumber(e.target.value)} required />
+                    <input type="text" id="houseNumber" name="numerDomu" value={NumerDomu} onChange={(e) => setNumerDomu(e.target.value)} required />
                     {errors.houseNumber && <p className="error">{errors.houseNumber}</p>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="flatNumber">Numer Mieszkania: (opcjonalne)</label>
-                    <input type="number" id="flatNumber" name="numerMieszkania" value={flatNumber} onChange={(e) => setFlatNumber(e.target.value)} />
+                    <input type="number" id="flatNumber" name="numerMieszkania" value={NumerMieszkania} onChange={(e) => setNumerMieszkania(e.target.value)} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="postalCode">Kod pocztowy:</label>
-                    <input type="text" id="postalCode" name="postalCode" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} required />
+                    <input type="text" id="postalCode" name="postalCode" value={KodPocztowy} onChange={(e) => setKodPocztowy(e.target.value)} required />
                     {errors.postalCode && <p className="error">{errors.postalCode}</p>}
                 </div>
                 <button type="submit" className="submit-button">Zamów</button>
