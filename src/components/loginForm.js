@@ -13,6 +13,12 @@ const LoginForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let userData = {};
+        let emailReg = new RegExp("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$");
+        let tempEmail = emailReg.test(email);
+        if (!tempEmail){
+            setError("Email niepoprawny");
+            return;
+        }
         userData={email:email,password:password};
         fetch('http://localhost:3001/userLogin', {
             method: 'POST',
