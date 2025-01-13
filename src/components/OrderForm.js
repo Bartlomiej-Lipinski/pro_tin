@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 const Form = () => {
@@ -30,11 +30,17 @@ const Form = () => {
     }, []);
 
     useEffect(() => {
-        const loggedInUser = Cookies.get('cart');
-        if (loggedInUser) {
-            setCart(JSON.parse(loggedInUser));
+        const loggedInCart = Cookies.get('cart');
+        if (loggedInCart) {
+            setCart(JSON.parse(loggedInCart));
         }
     }, []);
+
+    useEffect(() => {
+        if (cart.length > 0) {
+            countCartItems(cart);
+        }
+    }, [cart]);
 
     const countCartItems = (cart) => {
         const map = new Map();
@@ -43,22 +49,25 @@ const Form = () => {
         });
         setCartMap(map);
     };
-    function submitCart(orderid, lekId, ilosc){
-        let cartToCommit = {orderid,lekId,ilosc};
-        fetch("http://localhost:3001/cart", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(cartToCommit)
-        }).then((res)=>{
-            res.status === 200 ? console.log("Utworzono zamówienie") : console.log("Błąd tworzenia zamówienia");
-        })
-    }
 
-    const handleSubmit = (e) => {
+    const submitCart = async (orderid, lekId, ilosc) => {
+        let cartToCommit = { orderid, lekId, ilosc };
+        try {
+            const res = await fetch("http://localhost:3001/cart", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(cartToCommit)
+            });
+            res.status === 200 ? console.log("Utworzono zamówienie") : console.log("Błąd tworzenia zamówienia");
+        } catch (error) {
+            console.error('Error submitting cart:', error);
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        let orderid = 0;
         const newErrors = validate();
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -72,26 +81,29 @@ const Form = () => {
             KodPocztowy,
             userId
         };
-        fetch("http://localhost:3001/order", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newOrder)
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                orderid = data.id;
-                countCartItems(cart);
-                if (orderid !== 0 || orderid !== undefined) {
-                    cartMap.forEach((value, key) => {
-                        submitCart(orderid, key, value);
-                    });
-                    Cookies.remove('cart');
+        try {
+            const res = await fetch("http://localhost:3001/order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newOrder)
+            });
+            const data = await res.json();
+            if (data.id !== undefined) {
+                for (const [key, value] of cartMap.entries()) {
+                    await submitCart(data.id, key, value);
                 }
-            })
-            .catch(error => console.log(error));
+                Cookies.remove('cart');
+                if (data.message === "Order created successfully") {
+                    window.location.href = `/zamowienia/${data.id}`;
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
+
     return (
         <div className="form-container">
             <h1>Formularz zamówienia</h1>
@@ -108,7 +120,7 @@ const Form = () => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="houseNumber">Numer domu:</label>
-                    <input type="number" id="houseNumber" name="numerDomu" value={NumerDomu} onChange={(e) => setNumerDomu(e.target.value)} required />
+                    <input type="text" id="houseNumber" name="numerDomu" value={NumerDomu} onChange={(e) => setNumerDomu(e.target.value)} required />
                     {errors.houseNumber && <p className="error">{errors.houseNumber}</p>}
                 </div>
                 <div className="form-group">
