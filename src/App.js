@@ -66,35 +66,36 @@ function App() {
             )}
           </nav>
           <Routes>
-            <Route path="/" element={<MainP />} />
-            <Route path="/register" element={<RegisterForm />} />
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/lek/:id" element={<LekDescription />} />
+            <Route path="/" element={<MainP/>}/>
+            <Route path="/register" element={<RegisterForm/>}/>
+            <Route path="/login" element={<LoginForm/>}/>
+            <Route path="/lek/:id" element={<LekDescription/>}/>
             {user && (
                 <>
-                  <Route path="/add" element={<OrderForm />} />
-                  <Route path='/zamowienia' element={<ListOrder />} />
-                  <Route path="/zamowienia/:id" element={<OrderDetails />} />
-                  <Route path='/user' element={<ListaUser />} />
-                  <Route path="/user/:id" element={<UserDetails />} />
-                  <Route path={'/carts'} element={<CartView />} />
-                  <Route path="/modify-order/:id" element={<ModifyOrder />} />
+                  <Route path="/add" element={<OrderForm/>}/>
+                  <Route path='/zamowienia' element={<ListOrder/>}/>
+                  <Route path="/zamowienia/:id" element={<OrderDetails/>}/>
+                  <Route path='/user' element={<ListaUser/>}/>
+                  <Route path="/user/:id" element={<UserDetails/>}/>
+                  <Route path={'/carts'} element={<CartView/>}/>
+                  <Route path="/modify-order/:id" element={<ModifyOrder/>}/>
                 </>
             )}
             {user && user.credentials === 'ADM' && (
                 <>
-                  <Route path="/addMedicine" element={<AddLekForm />} />
-                  <Route path="/listaLekowLekarz" element={<ListaLekLekarz />} />
-                  <Route path="/modify-lek/:id" element={<ModifyLek />} />
-                  <Route path='/user' element={<ListaUser />} />
-                  <Route path="/user/:id" element={<UserDetails />} />
-                  <Route path={"/modify-user/:id"} element={<ModifyUser />} />
+                  <Route path="/addMedicine" element={<AddLekForm/>}/>
+                  <Route path="/listaLekowLekarz" element={<ListaLekLekarz/>}/>
+                  <Route path="/modify-lek/:id" element={<ModifyLek/>}/>
+                  <Route path='/user' element={<ListaUser/>}/>
+                  <Route path="/user/:id" element={<UserDetails/>}/>
+                  <Route path={"/modify-user/:id"} element={<ModifyUser/>}/>
                 </>
             )}
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<NotFound/>}/>
           </Routes>
           <div className='lan'>
-            <a>PL</a>/<a>EN</a>
+              <a href="/pl">PL</a>
+              <a href="/en">EN</a>
           </div>
         </div>
       </Router>
