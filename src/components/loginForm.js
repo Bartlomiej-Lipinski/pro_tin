@@ -6,30 +6,45 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [users, setUsers] = useState([]);
+    const [user, setUser] = useState({});
+    const [error, setError] = useState("");
 
-    React.useEffect(() => {
-        fetch("http://localhost:3001/userLogin")
-            .then((res) => res.json())
-            .then((data) => {
-                setUsers(data);
-            });
-    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         let userData = {};
-        users.map(user => {
-            if (user.Email === email && user.Password === password) {
-                 userData = { id:user.Id, firstName: user.Imie, lastName: user.Nazwisko , email: user.Email ,credentials: user.Credential};
-                Cookies.set('user', JSON.stringify(userData));
+        userData={email:email,password:password};
+        fetch('http://localhost:3001/userLogin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        })
+            .then(response =>{
+                if (response.status === 404){
+                    setError("Email lub haslo niepoprawne")
+                    return null;
+                }
+                return response.json()
+            })
+            .then(data => {
+                setUser(data)
+                const loggedInUser = {
+                    id: data.Id,
+                    firstName: data.Imie,
+                    lastName: data.Nazwisko,
+                    email: data.Email,
+                    credentials: data.Credential
+                };
+                Cookies.set('user', JSON.stringify(loggedInUser));
                 navigate("/");
                 window.location.reload();
                 console.log("Logged in successfully");
-            }else {
-                console.log("Invalid email or password");
-            }
-        });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     };
 
     return (
@@ -39,6 +54,7 @@ const LoginForm = () => {
             <label>Password:</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             <button type="submit">Login</button>
+            {error && <p>{error}</p>}
         </form>
     );
 };
