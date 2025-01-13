@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
 
 const Cart = ({cart,credentials}) => {
     const [lek, setLek] = useState({});
@@ -38,7 +37,7 @@ const Cart = ({cart,credentials}) => {
 
     return(
         <div>
-            <h1>{cart.Id}</h1>
+            <h1>{cart.id}</h1>
             <div className='lek-details'>
                 <p>NumerZamówienia: {cart.Order_NumerZamowienia}</p>
                 <p>Lek: {lek.Nazwa}</p>

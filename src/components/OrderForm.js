@@ -108,7 +108,7 @@ const Form = () => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="houseNumber">Numer domu:</label>
-                    <input type="text" id="houseNumber" name="numerDomu" value={NumerDomu} onChange={(e) => setNumerDomu(e.target.value)} required />
+                    <input type="number" id="houseNumber" name="numerDomu" value={NumerDomu} onChange={(e) => setNumerDomu(e.target.value)} required />
                     {errors.houseNumber && <p className="error">{errors.houseNumber}</p>}
                 </div>
                 <div className="form-group">

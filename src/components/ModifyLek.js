@@ -4,7 +4,7 @@ import AddLekForm from "./AddLekForm";
 
 function ModifyLek() {
     const { id } = useParams();
-    const [lek, setLek] = useState(null);
+    const [lek, setLek] = useState({});
 
     useEffect(() => {
         fetch(`http://localhost:3001/lek/${id}`)

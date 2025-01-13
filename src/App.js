@@ -17,6 +17,7 @@ import UserDetails from "./components/UserDetails";
 import Cookies from "js-cookie";
 import CartView from "./components/CartView";
 import ModifyUser from "./components/ModifyUser";
+import ModifyOrder from "./components/ModifyOrder";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -77,6 +78,7 @@ function App() {
                   <Route path='/user' element={<ListaUser />} />
                   <Route path="/user/:id" element={<UserDetails />} />
                   <Route path={'/carts'} element={<CartView />} />
+                  <Route path="/modify-order/:id" element={<ModifyOrder />} />
                 </>
             )}
             {user && user.credentials === 'ADM' && (

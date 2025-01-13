@@ -1,31 +1,32 @@
 import React, { useState, useEffect } from "react";
 import {useParams} from "react-router-dom";
+import Cart from "./Cart";
 
 function OrderDetails() {
     const { id } = useParams();
-    const [orderDetails, setOrderDetails] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [orderDetails, setOrderDetails] = useState({});
+    const [cart, setCart] = useState([]);
 
     useEffect(() => {
-        if (loading) {
             fetch(`http://localhost:3001/order/${id}`)
                 .then(response => response.json())
                 .then(data => {
                     setOrderDetails(data);
-                    setLoading(false);
                 })
                 .catch(error => {
                     console.log(error);
-                    setLoading(false);
                 });
-        } else {
-            setLoading(false);
-        }
     }, [id]);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    useEffect(()=>{
+        fetch(`http://localhost:3001/cart/order/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                setCart(data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },[id])
 
     return (
         <div>
@@ -36,6 +37,17 @@ function OrderDetails() {
                 <p>Ulica: {orderDetails.Ulica}</p>
                 <p>Numer domu: {orderDetails.NumerDomu}</p>
                 <p>Numer mieszkania: {orderDetails.NumerMieszkania}</p>
+            </div>
+            <div>
+            <h2>Cart</h2>
+                <ul>
+
+                    {cart.map(cart => (
+                        <li key={cart.id}>
+                           <Cart cart={cart} />
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     );
